@@ -3,11 +3,13 @@
 let numberOfFilms;
 
 function start() {
-	numberOfFilms	= +prompt('Сколько фильмов вы уже посмотрели?', '');
+	numberOfFilms	= +prompt('Сколько фильмов вы уже посмотрели?', '10');
 	while (numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms) ) {
 		numberOfFilms	= +prompt('Сколько фильмов вы уже посмотрели?', '');
 	}
 }
+
+start();
 
 const personalMovieDB = {
 	count: numberOfFilms,
@@ -18,7 +20,7 @@ const personalMovieDB = {
 };
 
 function rememberMyFilms() {
-	for (let i = 0; i<2; i++) {
+	for (let i = 0; i < 2; i++) {
 
 		const a = prompt('Один из последних просмотренных фильмов?', 'Чики'),	
 					b = prompt('На сколько оцените его?', 5);
@@ -33,7 +35,7 @@ function rememberMyFilms() {
 	}
 }
 
-rememberMyFilms()
+rememberMyFilms();
 
 function detectPersonalLevel() {
 	
@@ -51,5 +53,25 @@ function detectPersonalLevel() {
 
 detectPersonalLevel();
 
-console.log(personalMovieDB);
+function showMyDB(hidden) {
+	if (!hidden) {
+		console.log(personalMovieDB);
+	}
+}
+
+showMyDB(personalMovieDB.privat);
+
+
+
+function writeYourGenres() {
+	for (let i = 1; i <= 3; i++) {
+		personalMovieDB.genres[i - 1] = prompt(`Ваш любимый жанр под номером ${i}`, 'Боевик');
+	}
+}
+
+debugger;
+
+writeYourGenres();
+
+
 
