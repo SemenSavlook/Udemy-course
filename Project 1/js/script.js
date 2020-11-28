@@ -69,8 +69,6 @@ function writeYourGenres() {
 	}
 }
 
-debugger;
-
 writeYourGenres();
 
 
