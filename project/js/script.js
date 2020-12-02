@@ -1,90 +1,100 @@
 'use strict';
 
-const movieDB = {
-    movies: [
-        "Логан",
-        "Лига справедливости",
-        "Ла-ла лэнд",
-        "Одержимость",
-				"Скотт Пилигрим против...",
-				"Я робот",
-				"Аритмия"
-    ]
-};
+document.addEventListener('DOMContentLoaded', () => {
 
-const	adv = document.querySelectorAll('.promo__adv img'),
-			poster = document.querySelector('.promo__bg'),
-			genre = poster.querySelector('.promo__genre'),
-			movieList = document.querySelector('.promo__interactive-list'),
-			confirmBtn = document.querySelector('.add button'),
-			inputField = document.querySelector('.adding__input'),
-			favorite = document.querySelector('.add input[type = checkbox]');
-			
+	const movieDB = {
+		movies: [
+			"Логан",
+			"Лига справедливости",
+			"Ла-ла лэнд",
+			"Одержимость",
+			"Скотт Пилигрим против...",
+			"Я робот",
+			"Аритмия"
+		]
+	};
 
-adv.forEach(item => {
-	item.remove();
-});
+	const adv = document.querySelectorAll('.promo__adv img'),
+		poster = document.querySelector('.promo__bg'),
+		genre = poster.querySelector('.promo__genre'),
+		movieList = document.querySelector('.promo__interactive-list'),
+		addForm = document.querySelector('form.add'),
+		addInput = addForm.querySelector('.adding__input'),
+		checkbox = addForm.querySelector('[type="checkbox"]');
 
-genre.textContent = 'Драма';
+	addForm.addEventListener('submit', (event) => {
+		event.preventDefault();
 
-poster.style.backgroundImage = 'url("img/bg.jpg")';
+		let newFilm = addInput.value;
+		const favorite = checkbox.checked;
 
+		if (newFilm && newFilm.charAt(0) !== ' ') {
 
-movieDB.movies.forEach(function (item, index , array) {
-	array[index] = item.toUpperCase();
-});
-movieDB.movies.sort();
+			if (newFilm.length > 21) {
+				newFilm = `${newFilm.substring(0,22)}...`;
+			}
 
+			if (favorite) {
+				console.log("Добавляем любимый фильм");
+			}
 
-function addEventDelete() {
-	let deleteFilm = document.querySelectorAll('.delete');
+			movieDB.movies.push(newFilm);
+			sortArr(movieDB.movies);
 	
-	deleteFilm.forEach((item, index) => {
-		item.addEventListener('click', function() {
-			movieDB.movies.splice(index, 1);
-			item.parentElement.remove();
-			renderList();
-
-			console.log(movieDB.movies);
-		}, { once: true });
-	});
-}
-
-function renderList() {
-
-	movieList.innerHTML = '';
-	
-	movieDB.movies.sort();
-	
-	movieDB.movies.forEach((film, i) => {
-		let cuttedName = film;
-		if (film.length > 21) {
-			cuttedName = film.slice(0, 21) + '...';
+			createMovieList(movieDB.movies, movieList);
 		}
-		movieList.innerHTML += `
-			<li class="promo__interactive-item">№${i + 1} ${cuttedName}
-			<div class="delete"></div>
-			</li>
-		`;
+
+		event.target.reset();
+
 	});
-	addEventDelete();
-}
 
-renderList();
+	const deleteAdv = (arr) => {
+		arr.forEach(item => {
+			item.remove();
+		});
+	};
+	
+	const makeChanges = () => {
+		genre.textContent = 'Драма';
+	
+		poster.style.backgroundImage = 'url("img/bg.jpg")';
+	};
 
+	const sortArr = (arr) => {
+		arr.sort();
+		arr.forEach((item,i, array) => {
+			array[i] = item.toUpperCase();
+		});
+	};
+	
+	function createMovieList(films, parent) {
+		parent.innerHTML = '';
+		sortArr(films);
 
-confirmBtn.addEventListener('click', function (evt) {
-	evt.preventDefault();
-	if (inputField.value != '' && inputField.value.charAt(0) !== ' ' || inputField.value == null) {
-		movieDB.movies.push(inputField.value.toUpperCase());
-		renderList();
-		console.log(movieDB.movies);
-		if (favorite.checked) { console.log("Добавляем любимый фильм"); }
+		films.forEach((film, i) => {
+			parent.innerHTML += `
+				<li class="promo__interactive-item">№${i + 1} ${film}
+				<div class="delete"></div>
+				</li>
+			`;
+		});
+
+		document.querySelectorAll('.delete').forEach((btn, i) =>{
+			btn.addEventListener('click', () => {
+				btn.parentElement.remove();
+				movieDB.movies.splice(i, 1);
+
+				createMovieList(films, parent);
+			});
+		});
 	}
+
+
+	makeChanges();
+	deleteAdv(adv);
+	
+	createMovieList(movieDB.movies, movieList);
+
+// ------------END-------------
 });
-
-
-
-
-
 
