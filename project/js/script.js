@@ -6,7 +6,9 @@ const movieDB = {
         "Лига справедливости",
         "Ла-ла лэнд",
         "Одержимость",
-        "Скотт Пилигрим против..."
+				"Скотт Пилигрим против...",
+				"Я робот",
+				"Аритмия"
     ]
 };
 
@@ -16,7 +18,8 @@ const	adv = document.querySelectorAll('.promo__adv img'),
 			movieList = document.querySelector('.promo__interactive-list'),
 			confirmBtn = document.querySelector('.add button'),
 			inputField = document.querySelector('.adding__input'),
-			deleteFilm = document.querySelectorAll('.delete');
+			favorite = document.querySelector('.add input[type = checkbox]');
+			
 
 adv.forEach(item => {
 	item.remove();
@@ -26,17 +29,34 @@ genre.textContent = 'Драма';
 
 poster.style.backgroundImage = 'url("img/bg.jpg")';
 
+
 movieDB.movies.forEach(function (item, index , array) {
 	array[index] = item.toUpperCase();
 });
+movieDB.movies.sort();
 
+
+function addEventDelete() {
+	let deleteFilm = document.querySelectorAll('.delete');
+	
+	deleteFilm.forEach((item, index) => {
+		item.addEventListener('click', function() {
+			movieDB.movies.splice(index, 1);
+			item.parentElement.remove();
+			renderList();
+
+			console.log(movieDB.movies);
+		}, { once: true });
+	});
+}
 
 function renderList() {
+
 	movieList.innerHTML = '';
 	
 	movieDB.movies.sort();
 	
-	movieDB.movies.forEach((film, i) =>{
+	movieDB.movies.forEach((film, i) => {
 		let cuttedName = film;
 		if (film.length > 21) {
 			cuttedName = film.slice(0, 21) + '...';
@@ -47,34 +67,23 @@ function renderList() {
 			</li>
 		`;
 	});
+	addEventDelete();
 }
 
 renderList();
 
-deleteFilm.forEach((item) => {
-	item.addEventListener('click', function(evt) {
-		// code here
-	});
-});
 
 confirmBtn.addEventListener('click', function (evt) {
 	evt.preventDefault();
 	if (inputField.value != '' && inputField.value.charAt(0) !== ' ' || inputField.value == null) {
 		movieDB.movies.push(inputField.value.toUpperCase());
 		renderList();
+		console.log(movieDB.movies);
+		if (favorite.checked) { console.log("Добавляем любимый фильм"); }
 	}
 });
 
-// deleteFilm.addEventListener('click', function (evt) {
 
-// });
-
-console.dir(deleteFilm);
-console.dir(deleteFilm[0].parentElement);
-console.dir(deleteFilm[0].parentNode);
-
-// console.log(movieDB.movies);
-// console.warn('working');
 
 
 
