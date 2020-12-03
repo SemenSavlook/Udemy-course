@@ -28,7 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		let newFilm = addInput.value;
 		const favorite = checkbox.checked;
 
-		if (newFilm && newFilm.charAt(0) !== ' ') {
+		newFilm = spaceRemover(newFilm);
+
+		if (newFilm) {
 
 			if (newFilm.length > 21) {
 				newFilm = `${newFilm.substring(0,22)}...`;
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		event.target.reset();
-
+		
 	});
 
 	const deleteAdv = (arr) => {
@@ -89,6 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	function spaceRemover (str) {
+		while (str.charAt(0) == ' ') {
+			str= str.slice(1);
+		}
+
+		return str;
+	}
+
 
 	makeChanges();
 	deleteAdv(adv);
@@ -97,4 +107,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ------------END-------------
 });
+
 
