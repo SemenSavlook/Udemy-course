@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	// TIMER ------------------------ ------------------------ ------------------------
 
-	const deadline = '2020-12-16';
+	const deadline = '2020-12-31';
 
 	function getTimeRemaining(endtime) {
 		const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -248,12 +248,13 @@ window.addEventListener('DOMContentLoaded', () => {
 				margin: 0 auto;
 			`;
 
-			form.insertAdjactedElement('afterend', statusMessage);
+			form.insertAdjacentElement('afterend', statusMessage);
 
-			const request = new XMLHttpRequest();
-			request.open('POST', 'server.php');
+			// Запрос через XMLHttpReques
+			// const request = new XMLHttpRequest();
+			// request.open('POST', 'server.php');
+			// request.setRequestHeader('Content-type', 'aplication/json');
 
-			request.setRequestHeader('Content-type', 'aplication/json');
 			const formData = new FormData(form);
 
 			const object = {};
@@ -261,19 +262,23 @@ window.addEventListener('DOMContentLoaded', () => {
 				object[key] = value;
 			});
 
-			const json = JSON.stringify(object);
+			fetch('server.php', {
+				method: "POST",
+				headers: {
+					'Content-type': 'aplication/json'
+				},
+				body: JSON.stringify(object)
+			})
+			.then(data => data.text())
+			.then(data => {
+				console.log(data);
+				showThanksModal(message.success);
 
-			request.send(json);
-
-			request.addEventListener('load', () => {
-				if (request.status === 200) {
-					console.log(request.response);
-					showThanksModal(message.success);
-					form.reset();
-					statusMessage.remove();
-				} else {
-					showThanksModal(message.failure);
-				}
+				statusMessage.remove();
+			}).catch(() => {
+				showThanksModal(message.failure);
+			}).finally(() =>{
+				form.reset();
 			});
 		});
 	}
@@ -301,7 +306,6 @@ window.addEventListener('DOMContentLoaded', () => {
 			closeModal();
 		}, 3000);
 	}
-
 
 	// END-END____------ ---------------------------------------
 });
