@@ -1,2 +1,8 @@
 # My JS study project.
-I took a course on Udemy.
+
+ - Для запуска, необходимо установить зависимости (npm). 
+ - Создать bundle.
+ - Запустить локальный  сервер.
+
+Превью проекта:
+https://semensavlook.github.io/Udemy-course/Food-dist/
